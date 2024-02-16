@@ -8,7 +8,7 @@ import json
 def normalize_extract_audio(audio_input, audio_output):
     # Step 1: Extracting the measured values from the first run:
     measure_cmds = [
-        "/applications/ffmpeg",
+        "ffmpeg",
         "-i",
         audio_input,
         "-filter_complex",
@@ -40,17 +40,18 @@ def normalize_extract_audio(audio_input, audio_output):
 
     # Step 2: Using the values in a second run with linear normalization enabled; also using filtering and denoising for audio optimizing:
     extract_cmds = [
-        "/applications/ffmpeg",
+        "ffmpeg",
         "-i",
         audio_input,
         "-filter_complex",
-        f"loudnorm=measured_I={loudness_values['input_i']}:measured_TP={loudness_values['input_tp']}:measured_LRA={loudness_values['input_lra']}:measured_thresh={loudness_values['input_thresh']},highpass=f=70,lowpass=f=10000,arnndn=m=rnnoise-models-master/conjoined-burgers-2018-08-28/cb.rnnn",
+        #f"loudnorm=measured_I={loudness_values['input_i']}:measured_TP={loudness_values['input_tp']}:measured_LRA={loudness_values['input_lra']}:measured_thresh={loudness_values['input_thresh']}:I=-12.0:LRA=3.0:TP=-1.0,,highpass=f=70,lowpass=f=10000,arnndn=m=rnnoise-models-master/conjoined-burgers-2018-08-28/cb.rnnn",
+        f"highpass=f=80,lowpass=f=6000,equalizer=f=1000:t=q:w=1.5:g=6,equalizer=f=3000:t=q:w=2:g=4,loudnorm=measured_I={loudness_values['input_i']}:measured_TP={loudness_values['input_tp']}:measured_LRA={loudness_values['input_lra']}:measured_thresh={loudness_values['input_thresh']}:I=-9.0:LRA=3.0:TP=-1.0",
         "-c:a", 
-        "pcm_s24le",
+        "pcm_s24le", # PCM little-endian 24 bit 
         "-ar", 
-        "48000",
+        "48000", # 48 kHz sample rate
         "-ac",
-        "2",
+        "1", # Mono output
         "-y",
         audio_output
     ]

@@ -21,7 +21,7 @@ def check_audiotrack(audio_input):
 # Check if the input file can be converted by FFmpeg:
 def verifyInputFile(audio_input):
     cmds = [
-        "/applications/ffmpeg",
+        "ffmpeg",
         "-i",
         audio_input,
         "-f",
@@ -39,7 +39,7 @@ def verifyInputFile(audio_input):
 # Check if the message "error" appeared in the input file's FFmpeg loglevel:
 def probeInputFile(audio_input):
     cmds = [
-        "/applications/ffprobe",
+        "ffprobe",
         "-loglevel",
         "error", # loglevel = ‘quiet, -8’, ‘panic, 0’, ‘fatal, 8’, ‘error, 16’, ‘warning, 24’, ‘info, 32’, ‘verbose, 40’, ‘debug, 48’, ‘trace, 56’
         audio_input
@@ -55,7 +55,7 @@ def probeInputFile(audio_input):
 # Check the FFmpeg probe score of the input file:
 def getProbeScore(audio_input):
     command = [
-        '/applications/ffprobe',
+        'ffprobe',
         '-v',
         'error',
         '-show_entries',
@@ -73,7 +73,7 @@ def getProbeScore(audio_input):
 # Function for testing the workflow:
 def convert_audio(full_path, audio_output):
     cmds = [
-        "/applications/ffmpeg",
+        "ffmpeg",
         "-i",
         full_path,
         #"-vcodec", 

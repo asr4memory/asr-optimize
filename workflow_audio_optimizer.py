@@ -10,6 +10,7 @@ from module_wav_conversion_normalizing import normalize_extract_audio
 
 # Audio Check Workflow:
 input_path = '/Users/ahenderson/Documents/Whisper_Test_Files/_input/'
+output_path = '/Users/ahenderson/Documents/Whisper_Test_Files/_output/'
 exclusions = (".DS_Store", "backup", "_test_", "_", "_test", ".")
 
 # Pre-compile regular expressions
@@ -46,8 +47,12 @@ for root, directories, files in os.walk(input_path):
                     failed_files_list.append((full_path, "Low FFprobe score"))
                     continue
 
-                print(f"======> This input file is valid and will be converted by FFmpeg: {full_path}, Probe-Score: {video_probescore_final}")
-                audio_output = full_path.rsplit('.', 1)[0] + "_audio-optimized.wav"
+                print(f"======> This input file is valid and will be processed by FFmpeg: {full_path}, Probe-Score: {video_probescore_final}")
+
+                base_name = os.path.basename(full_path)  # Extracts the file name from the full path
+                output_file_name = base_name.rsplit('.', 1)[0] + "_audio-optimized-norm-high-equal-12.wav"
+                audio_output = os.path.join(output_path, output_file_name)  # Compiles the new output path
+
                 wav_converter, loudness_values = normalize_extract_audio(full_path, audio_output)
                 if loudness_values:
                     loudnorm_list.append((full_path, loudness_values))
