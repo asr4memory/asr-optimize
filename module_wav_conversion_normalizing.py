@@ -76,9 +76,9 @@ def normalize_extract_audio(audio_input, audio_output):
 def simple_normalize_audio(input_audio, output_audio):
     try:
         # Define the filter chain for loudness normalization
-        filter_chain = ',equalizer=f=1000:t=q:w=1.5:g=6'
-        filter_chain += ',equalizer=f=3000:t=q:w=2:g=4'
-        filter_chain += 'loudnorm=I=-9.0:LRA=2.0:TP=-2.0'
+        filter_chain = 'loudnorm=I=-12.0:LRA=3.0:TP=-1.0'
+        #filter_chain += ',equalizer=f=1000:t=q:w=1.5:g=6'
+        #filter_chain += ',equalizer=f=3000:t=q:w=2:g=4'
 
         cmd = [
             'ffmpeg',
@@ -87,6 +87,12 @@ def simple_normalize_audio(input_audio, output_audio):
             input_audio,  # Specify the input audio file
             '-filter:a', 
             filter_chain,  # Apply the filter chain
+            "-c:a", 
+            "pcm_s16le", # Pulse-Code Modulation bit rate little-endian -> Per default, Whisper uses pcm_s16le. 
+            "-ar", 
+            "16000", # Sample rate -> Per default, Whisper resamples the input audio to 16kHz.
+            "-ac",
+            "1", # Mono or stereo output -> Per default, Whisper uses mono. 
             output_audio  # Specify the output audio file
         ]
 
