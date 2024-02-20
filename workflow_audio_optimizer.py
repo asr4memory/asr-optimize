@@ -12,8 +12,8 @@ from module_wav_conversion_normalizing import simple_normalize_audio
 # Audio Check Workflow:
 #input_path = '/Users/ahenderson/Documents/Whisper_Test_Files/_input/'
 #output_path = '/Users/ahenderson/Documents/Whisper_Test_Files/_output/'
-input_path = '/Users/tkilgus/Downloads/_input/'
-output_path = '/Users/tkilgus/Downloads/_output/'
+input_path = '/Users/ahenderson/Downloads/_input/'
+output_path = '/Users/ahenderson/Downloads/_output/'
 exclusions = (".DS_Store", "backup", "_test_", "_", "_test", ".")
 
 # Pre-compile regular expressions
