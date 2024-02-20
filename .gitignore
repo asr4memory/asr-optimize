@@ -1,0 +1,9 @@
+asr-optimize_venv/
+asr-optimize-test_venv/
+speechbrain_test_01.py
+__pycache__/
+audio_cache/
+pretrained_models/
+results/
+rnnoise-models-master/
+

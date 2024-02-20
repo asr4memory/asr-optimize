@@ -10,10 +10,8 @@ from module_wav_conversion_normalizing import normalize_extract_audio
 from module_wav_conversion_normalizing import simple_normalize_audio
 
 # Audio Check Workflow:
-#input_path = '/Users/ahenderson/Documents/Whisper_Test_Files/_input/'
-#output_path = '/Users/ahenderson/Documents/Whisper_Test_Files/_output/'
-input_path = '/Users/ahenderson/Downloads/_input/'
-output_path = '/Users/ahenderson/Downloads/_output/'
+input_path = '/Users/ahenderson/Documents/Whisper_Test_Files/_input/'
+output_path = '/Users/ahenderson/Documents/Whisper_Test_Files/_output/'
 exclusions = (".DS_Store", "backup", "_test_", "_", "_test", ".")
 
 # Pre-compile regular expressions
@@ -53,17 +51,22 @@ for root, directories, files in os.walk(input_path):
                 print(f"======> This input file is valid and will be processed by FFmpeg: {full_path}, Probe-Score: {video_probescore_final}")
 
                 base_name = os.path.basename(full_path)  # Extracts the file name from the full path
-                output_file_name = base_name.rsplit('.', 1)[0] + "_audio-optimized-norm-high-equal-16khz-h_after-norm.wav"
+                output_file_name = base_name.rsplit('.', 1)[0] + "_audio-optimized_intermediary.wav" # Creates the intermediary output file name
                 audio_output = os.path.join(output_path, output_file_name)  # Compiles the new output path
 
                 wav_converter, loudness_values = normalize_extract_audio(full_path, audio_output)
                 if loudness_values:
                     loudnorm_list.append((full_path, loudness_values))
 
-                    output_file_name2 = base_name.rsplit('.', 1)[0] + "_audio-optimized-norm-high-equal-16khz-h_after-norm2.wav"
+                    output_file_name2 = base_name.rsplit('.', 1)[0] + "_audio-optimized.wav" # ===> Creates the final output file name
                     audio_output2 = os.path.join(output_path, output_file_name2)  # Compiles the new output path
                     # After the WAV file has been normalized and extracted, call normalize_audio:
                     simple_normalize_audio(audio_output, audio_output2)  # Overwrite the file with its normalized version
+
+                # After processing the intermediary file and no longer needing it, delete it:
+                if os.path.exists(audio_output):
+                    os.remove(audio_output)
+                    print(f"Deleted intermediary file: {audio_output}")
 
             else:
                 failed_files_list.append((full_path, "Unable to determine the FFprobe score"))
@@ -84,7 +87,4 @@ print("\n======> List of files that have not met the conditions:")
 for file_path, reason in failed_files_list:
     print(f"Input File: {file_path} - Reason: {reason}")
 
-# After processing and no longer needing audio_output, delete it
-if os.path.exists(audio_output):
-    os.remove(audio_output)
-    print(f"Deleted intermediary file: {audio_output}")
+

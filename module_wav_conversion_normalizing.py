@@ -76,9 +76,9 @@ def normalize_extract_audio(audio_input, audio_output):
 def simple_normalize_audio(input_audio, output_audio):
     try:
         # Define the filter chain for loudness normalization
-        filter_chain = 'loudnorm=I=-12.0:LRA=3.0:TP=-1.0'
-        #filter_chain += ',equalizer=f=1000:t=q:w=1.5:g=6'
-        #filter_chain += ',equalizer=f=3000:t=q:w=2:g=4'
+        filter_chain = 'equalizer=f=1000:t=q:w=1.5:g=4'  
+        filter_chain += ',equalizer=f=3000:t=q:w=2:g=3'
+        filter_chain += ',loudnorm=I=-9.0:LRA=2.0:TP=-1.0' 
 
         cmd = [
             'ffmpeg',
