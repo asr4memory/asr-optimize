@@ -27,7 +27,7 @@ for root, directories, files in os.walk(input_path):
             continue
 
         full_path = os.path.join(root, audio_input)
-        
+
         if check_audiotrack(full_path):
             print(f"======> The input file contains an audio track: {audio_input}")
             video_verifier = verifyInputFile(full_path)
@@ -86,5 +86,3 @@ for file_path, loudness_values in loudnorm_list:
 print("\n======> List of files that have not met the conditions:")
 for file_path, reason in failed_files_list:
     print(f"Input File: {file_path} - Reason: {reason}")
-
-
