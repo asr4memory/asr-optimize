@@ -8,10 +8,12 @@ from typing import List, Tuple, Any
 from module_input_verifying import check_audiotrack, verifyInputFile, probeInputFile, getProbeScore
 from module_wav_conversion_normalizing import normalize_extract_audio
 from module_wav_conversion_normalizing import simple_normalize_audio
+from app_config import get_config
 
 # Audio Check Workflow:
-input_path = '/Users/ahenderson/Documents/Whisper_Test_Files/_input/'
-output_path = '/Users/ahenderson/Documents/Whisper_Test_Files/_output/'
+config = get_config()["system"]
+input_path = config["input_path"]
+output_path = config["output_path"]
 exclusions = (".DS_Store", "backup", "_test_", "_", "_test", ".")
 
 # Pre-compile regular expressions

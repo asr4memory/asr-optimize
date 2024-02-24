@@ -6,4 +6,4 @@ audio_cache/
 pretrained_models/
 results/
 rnnoise-models-master/
-
+config.toml
