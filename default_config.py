@@ -5,8 +5,8 @@ if present.
 """
 
 CONST_DEFAULT_CONFIG = {
-    'system': {
-        'input_path': '',
-        'output_path': '',
+    "system": {
+        "input_path": "",
+        "output_path": "",
     },
 }

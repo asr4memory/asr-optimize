@@ -5,7 +5,12 @@ import os
 import re
 from typing import List, Tuple, Any
 
-from module_input_verifying import check_audiotrack, verifyInputFile, probeInputFile, getProbeScore
+from module_input_verifying import (
+    check_audiotrack,
+    verifyInputFile,
+    probeInputFile,
+    getProbeScore,
+)
 from module_wav_conversion_normalizing import normalize_extract_audio
 from module_wav_conversion_normalizing import simple_normalize_audio
 from app_config import get_config
@@ -25,7 +30,10 @@ failed_files_list = []
 
 for root, directories, files in os.walk(input_path):
     for audio_input in files:
-        if any(audio_input.endswith(ext) or audio_input.startswith(ext) for ext in exclusions):
+        if any(
+            audio_input.endswith(ext) or audio_input.startswith(ext)
+            for ext in exclusions
+        ):
             continue
 
         full_path = os.path.join(root, audio_input)
@@ -33,13 +41,20 @@ for root, directories, files in os.walk(input_path):
         if check_audiotrack(full_path):
             print(f"======> The input file contains an audio track: {audio_input}")
             video_verifier = verifyInputFile(full_path)
-            if "Conversion failed" in video_verifier or "Packet corrupt" in video_verifier:
-                failed_files_list.append((full_path, "Conversion failed or packet corrupt"))
+            if (
+                "Conversion failed" in video_verifier
+                or "Packet corrupt" in video_verifier
+            ):
+                failed_files_list.append(
+                    (full_path, "Conversion failed or packet corrupt")
+                )
                 continue
 
             video_prober = probeInputFile(full_path)
             if "Invalid" in video_prober:
-                failed_files_list.append((full_path, "Contains INVALID AV DATA according to FFprobe"))
+                failed_files_list.append(
+                    (full_path, "Contains INVALID AV DATA according to FFprobe")
+                )
                 continue
 
             video_probescore = getProbeScore(full_path)
@@ -50,20 +65,36 @@ for root, directories, files in os.walk(input_path):
                     failed_files_list.append((full_path, "Low FFprobe score"))
                     continue
 
-                print(f"======> This input file is valid and will be processed by FFmpeg: {full_path}, Probe-Score: {video_probescore_final}")
+                print(
+                    f"======> This input file is valid and will be processed by FFmpeg: {full_path}, Probe-Score: {video_probescore_final}"
+                )
 
-                base_name = os.path.basename(full_path)  # Extracts the file name from the full path
-                output_file_name = base_name.rsplit('.', 1)[0] + "_audio-optimized_intermediary.wav" # Creates the intermediary output file name
-                audio_output = os.path.join(output_path, output_file_name)  # Compiles the new output path
+                base_name = os.path.basename(
+                    full_path
+                )  # Extracts the file name from the full path
+                output_file_name = (
+                    base_name.rsplit(".", 1)[0] + "_audio-optimized_intermediary.wav"
+                )  # Creates the intermediary output file name
+                audio_output = os.path.join(
+                    output_path, output_file_name
+                )  # Compiles the new output path
 
-                wav_converter, loudness_values = normalize_extract_audio(full_path, audio_output)
+                wav_converter, loudness_values = normalize_extract_audio(
+                    full_path, audio_output
+                )
                 if loudness_values:
                     loudnorm_list.append((full_path, loudness_values))
 
-                    output_file_name2 = base_name.rsplit('.', 1)[0] + "_audio-optimized.wav" # ===> Creates the final output file name
-                    audio_output2 = os.path.join(output_path, output_file_name2)  # Compiles the new output path
+                    output_file_name2 = (
+                        base_name.rsplit(".", 1)[0] + "_audio-optimized.wav"
+                    )  # ===> Creates the final output file name
+                    audio_output2 = os.path.join(
+                        output_path, output_file_name2
+                    )  # Compiles the new output path
                     # After the WAV file has been normalized and extracted, call normalize_audio:
-                    simple_normalize_audio(audio_output, audio_output2)  # Overwrite the file with its normalized version
+                    simple_normalize_audio(
+                        audio_output, audio_output2
+                    )  # Overwrite the file with its normalized version
 
                 # After processing the intermediary file and no longer needing it, delete it:
                 if os.path.exists(audio_output):
@@ -71,7 +102,9 @@ for root, directories, files in os.walk(input_path):
                     print(f"Deleted intermediary file: {audio_output}")
 
             else:
-                failed_files_list.append((full_path, "Unable to determine the FFprobe score"))
+                failed_files_list.append(
+                    (full_path, "Unable to determine the FFprobe score")
+                )
         else:
             failed_files_list.append((full_path, "No audio track"))
 
@@ -82,7 +115,7 @@ for file_path, loudness_values in loudnorm_list:
     print("Loudness Values:")
     for key, value in loudness_values.items():
         print(f"  {key}: {value}")
-    print() # Empty line for readability
+    print()  # Empty line for readability
 
 # Summary of files that have not been converted:
 print("\n======> List of files that have not met the conditions:")
