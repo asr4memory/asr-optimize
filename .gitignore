@@ -7,3 +7,6 @@ pretrained_models/
 results/
 rnnoise-models-master/
 config.toml
+
+/.idea
+/.venv
